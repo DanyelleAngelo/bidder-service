@@ -2,27 +2,44 @@ package com.example.bidder_service.controller;
 
 import com.example.bidder_service.factory.BidFactory;
 import com.example.bidder_service.model.Bid;
+import com.example.bidder_service.service.BidService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(BidController.class)
+@ExtendWith(MockitoExtension.class)
 public class BidControllerTest {
-  @Autowired
+  @Mock
+  private BidService service;
+
+  @InjectMocks
+  private BidController controller;
+
   private MockMvc mvc;
+
   private final ObjectMapper mapper = new ObjectMapper();
+
+  @BeforeEach
+  void setup() {
+    mvc = MockMvcBuilders.standaloneSetup(controller).build();
+  }
 
   @Test
   @DisplayName("return status code 400 when required params are missing")
-  void shouldReturnAnErrorIfTheRequiredParamsIsNotReceived() throws Exception{
+  void shouldReturnAnErrorIfTheRequiredParamsIsNotReceived() throws Exception {
     Bid bid = BidFactory.invalidBid();
+
     mvc
         .perform(
             post("/bids")
@@ -30,5 +47,19 @@ public class BidControllerTest {
             .content(mapper.writeValueAsString(bid))
         )
         .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @DisplayName("return status code 202 when receives a valid request")
+  void shouldReturnAcceptedIfReceivesAValidRequest() throws Exception {
+    Bid bid = BidFactory.validBid();
+
+    mvc
+        .perform(
+            post("/bids")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(bid))
+        )
+        .andExpect(status().isAccepted());
   }
 }

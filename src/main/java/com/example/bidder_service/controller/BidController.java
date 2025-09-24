@@ -19,7 +19,11 @@ public class BidController {
 
   @PostMapping
   public ResponseEntity<Void> submitBid(@RequestBody @Valid Bid bid) {
-    service.publish(bid);
-    return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    try {
+      service.publish(bid);
+      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    } catch (Exception error) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
   }
 }

@@ -1,0 +1,4 @@
+application:
+  name: bidder-service
+kafka:
+  bootstrap-servers: localhost:9092

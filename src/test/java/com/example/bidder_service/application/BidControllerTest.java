@@ -1,5 +1,6 @@
-package com.example.bidder_service.controller;
+package com.example.bidder_service.application;
 
+import com.example.bidder_service.controller.BidController;
 import com.example.bidder_service.factory.BidFactory;
 import com.example.bidder_service.model.Bid;
 import com.example.bidder_service.service.BidService;

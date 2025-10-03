@@ -1,7 +1,7 @@
 package com.example.bidder_service.controller;
 
-import com.example.bidder_service.model.Bid;
-import com.example.bidder_service.service.BidService;
+import com.example.bidder_service.domain.Bid;
+import com.example.bidder_service.application.BidService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

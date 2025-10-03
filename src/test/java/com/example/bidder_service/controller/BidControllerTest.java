@@ -1,9 +1,8 @@
-package com.example.bidder_service.application;
+package com.example.bidder_service.controller;
 
-import com.example.bidder_service.controller.BidController;
+import com.example.bidder_service.application.BidService;
 import com.example.bidder_service.factory.BidFactory;
-import com.example.bidder_service.model.Bid;
-import com.example.bidder_service.service.BidService;
+import com.example.bidder_service.domain.Bid;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;

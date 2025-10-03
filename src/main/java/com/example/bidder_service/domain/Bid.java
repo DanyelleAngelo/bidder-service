@@ -1,4 +1,4 @@
-package com.example.bidder_service.model;
+package com.example.bidder_service.domain;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

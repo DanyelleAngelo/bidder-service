@@ -1,6 +1,6 @@
 package com.example.bidder_service.factory;
 
-import com.example.bidder_service.model.Bid;
+import com.example.bidder_service.domain.Bid;
 
 public class BidFactory {
 

@@ -18,19 +18,19 @@ public class KafkaMessagePublisher implements MessagePublisher {
   private static final Logger logger = LoggerFactory.getLogger(KafkaMessagePublisher.class);
 
   @Override
-  public void publish(String topic, String message) throws InfrastructureException {
+  public void publish(String target, String message) throws InfrastructureException {
     try {
-      CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, message);
+      CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(target, message);
 
       future.whenComplete((result, ex) -> {
         if( ex != null) {
-          logger.error("Unable to send message to topic {} due to: {}", topic, ex.getMessage());
+          logger.error("Unable to send message to topic {} due to: {}", target, ex.getMessage());
         } else {
-          logger.info("Sent message with offset=[{}] to topic {}", result.getRecordMetadata().offset(), topic);
+          logger.info("Sent message with offset=[{}] to topic {}", result.getRecordMetadata().offset(), target);
         }
       });
     } catch (Exception err) {
-      String errorMessage = "An error occurred when trying to send message to " + topic + " topic";
+      String errorMessage = "An error occurred when trying to send message to " + target + " topic";
       throw new InfrastructureException(errorMessage, err);
     }
   }

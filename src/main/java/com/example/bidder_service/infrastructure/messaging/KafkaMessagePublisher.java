@@ -2,6 +2,8 @@ package com.example.bidder_service.infrastructure.messaging;
 
 import com.example.bidder_service.domain.exception.InfrastructureException;
 import com.example.bidder_service.domain.messaging.MessagePublisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -13,21 +15,22 @@ import java.util.concurrent.CompletableFuture;
 public class KafkaMessagePublisher implements MessagePublisher {
   @Autowired
   private KafkaTemplate<String, String> kafkaTemplate;
+  private static final Logger logger = LoggerFactory.getLogger(KafkaMessagePublisher.class);
 
   @Override
   public void publish(String topic, String message) throws InfrastructureException {
     try {
       CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, message);
+
       future.whenComplete((result, ex) -> {
-        if (result != null) {
-          System.out.println("Sent message with offset=[" + result.getRecordMetadata().offset() + "] to topic " + topic);
+        if( ex != null) {
+          logger.error("Unable to send message to topic {} due to: {}", topic, ex.getMessage());
         } else {
-          String errorMessage = String.format("Unable to send message to topic %s due to: %s", topic, ex.getMessage());
-          System.out.println(errorMessage);
+          logger.info("Sent message with offset=[{}] to topic {}", result.getRecordMetadata().offset(), topic);
         }
       });
     } catch (Exception err) {
-      String errorMessage = String.format("An error occurred when trying to send message to %s topic", topic);
+      String errorMessage = "An error occurred when trying to send message to " + topic + " topic";
       throw new InfrastructureException(errorMessage, err);
     }
   }

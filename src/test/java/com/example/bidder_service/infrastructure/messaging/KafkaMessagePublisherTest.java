@@ -37,11 +37,4 @@ public class KafkaMessagePublisherTest {
 
     assertThrows(InfrastructureException.class, () -> publisher.publish(topic, message));
   }
-
-//  @Test
-//  void shouldThrowInfrastructureExceptionWhenFutureCompletesExceptionally() {
-//    when(kafkaTemplate.send(topic, message)).thenReturn(CompletableFuture.failedFuture(new RuntimeException("Timeout")));
-//
-//    assertThrows(InfrastructureException.class, () -> publisher.publish(topic, message));
-//  }
 }

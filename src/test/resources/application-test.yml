@@ -2,3 +2,6 @@ application:
   name: bidder-service
 kafka:
   bootstrap-servers: localhost:9092
+messaging:
+  targets:
+    bid: submitted-bids

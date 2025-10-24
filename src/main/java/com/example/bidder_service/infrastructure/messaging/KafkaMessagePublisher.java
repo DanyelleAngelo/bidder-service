@@ -19,6 +19,7 @@ public class KafkaMessagePublisher implements MessagePublisher {
 
   @Override
   public void publish(String target, String message) throws InfrastructureException {
+    logger.info("Sending message to topic {}...", target);
     try {
       CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(target, message);
 

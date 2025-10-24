@@ -6,6 +6,8 @@ import com.example.bidder_service.domain.exception.InfrastructureException;
 import com.example.bidder_service.domain.messaging.MessagePublisher;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,8 @@ public class BidService {
   MessagePublisher publisher;
   String target;
   ObjectMapper mapper;
+  private static final Logger logger = LoggerFactory.getLogger(BidService.class);
+
 
   @Autowired
   public BidService(MessagePublisher publisher, @Value("${messaging.targets.bid}") String target, ObjectMapper mapper) {
@@ -33,6 +37,7 @@ public class BidService {
     try {
       return mapper.writeValueAsString(bid);
     } catch (JsonProcessingException e) {
+      logger.error("An error occurred when trying to serialize message.");
       throw new BidProcessingException("Failed to serialize bid", e);
     }
   }
